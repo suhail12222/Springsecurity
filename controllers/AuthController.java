@@ -23,7 +23,7 @@ public class AuthController {
     public ResponseEntity<UserDto> signUp(@RequestBody SignupDto signupDto){
     UserDto userDto= userService.signUp(signupDto);
     return ResponseEntity.ok(userDto);
-}
+} //   when user sigin we provide jwt token from here to maintain  for one min only next part will be to give refresh token after this token expiration.\\
 @PostMapping("/signin")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
     String token= authService.login(loginDto);
