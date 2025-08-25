@@ -1,16 +1,17 @@
 package com.practices.demo.controllers;
 
 import com.practices.demo.dto.LoginDto;
+import com.practices.demo.dto.PostDto;
 import com.practices.demo.dto.SignupDto;
 import com.practices.demo.dto.UserDto;
 import com.practices.demo.service.AuthService;
+import com.practices.demo.service.PostService;
 import com.practices.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,6 +30,4 @@ public class AuthController {
     return ResponseEntity.ok(token);
 
     }
-
-//}
 }
