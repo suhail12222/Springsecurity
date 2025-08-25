@@ -1,6 +1,8 @@
 package com.practices.demo.configs;
 
 import com.practices.demo.entities.UserEntity;
+import com.practices.demo.filter.AuthJwtFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,17 +17,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 ///posts/auth/**
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class webSecurityConfig {
+    private final AuthJwtFilter authJwtFilter;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf(csrf -> csrf.disable()) // disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()  // allow signup/login
-                        .anyRequest().authenticated()             // everything else needs auth
-                )
+                        .anyRequest().authenticated()
+                        // everything else needs auth
+                ).addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())   // ❌ disable Spring’s login page
                 .httpBasic(basic -> basic.disable()); // ❌ disable HTTP Basic too
 
@@ -50,8 +57,5 @@ public class webSecurityConfig {
 //
 //        return new InMemoryUserDetailsManager(normalUser,Admin);
 //    }
-    @Bean
-    PasswordEncoder pe(){
-        return new BCryptPasswordEncoder();
-    }
+
 }
