@@ -47,17 +47,25 @@ public class JwtService {
     public SecretKey getSecretKey(){
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
     }
+  // it is acess token
     public String generateSecretKey(UserEntity user){
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email",user.getEmail())
                 .claim("role",Set.of("ADMIN","USER"))
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+1000*60))
+                .expiration(new Date(System.currentTimeMillis()+1000*60*4))
                 .signWith(getSecretKey())
                 .compact();
-
-
+    }
+    //rereshtoken
+    public String getRefreshToken(UserEntity user){
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis()+1000*60*60*24*6))
+                .signWith(getSecretKey())
+                .compact();
     }
     //validate
     public Long getValidate(String token){
