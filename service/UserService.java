@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.OptionalInt;
+
 @Service
 @RequiredArgsConstructor
 
@@ -34,11 +36,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByEmail(username).orElseThrow(()->new ResourceNotFoundException("Yate chi mumd"));
+        return userRepo.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("user with this email "+username+"is not present"));
     }
     public UserDto signUp(SignupDto signupDto) {
 //        Optional<UserEntity> user=UserRepo.findByEmail(SignupDto.getEmail());
-       Optional<UserEntity> user= userRepo.findByEmail(signupDto.getEmail());
+    Optional <UserEntity> user= userRepo.findByEmail(signupDto.getEmail());
   if (user.isPresent()){
       throw new BadCredentialsException("user with this email exist");
   }

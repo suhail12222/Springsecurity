@@ -5,6 +5,7 @@ import com.practices.demo.entities.PostEntity;
 import com.practices.demo.exception.ResourceNotFoundException;
 import com.practices.demo.repositories.PostRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class PostServiceImplementation implements  PostService {
     @Override
     public PostDto getPostById(long id) {
         PostEntity postEntity=postRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("lath maan chai yate emi id sth gasya "));
+                .orElseThrow(()->new ResourceNotFoundException("no such member is present with this "+id+" "));
 
         return modelMapper.map(postEntity,PostDto.class);
 
