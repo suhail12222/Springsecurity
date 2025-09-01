@@ -16,6 +16,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
+@Builder
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
