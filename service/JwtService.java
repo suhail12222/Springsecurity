@@ -44,11 +44,12 @@ public class JwtService {
     @Value("${jwt.secretkey}")
     private String jwtSecretKey;
     private String token;
+    //genrating secret key
     public SecretKey getSecretKey(){
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
     }
   // it is acess token
-    public String generateSecretKey(UserEntity user){
+    public String generateSecritKey(UserEntity user){
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email",user.getEmail())
