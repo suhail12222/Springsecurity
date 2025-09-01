@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,9 +51,20 @@ public class UserService implements UserDetailsService {
   return modelMapper.map(saved,UserDto.class);
 
 }
+public UserEntity getUserByEmail(String email){
+        return  userRepo.findByEmail(email)
+//                .orElseThrow(()->new ResourceNotFoundException("user with this email is not present"+email));
+
+                .orElse(null);
+    }
+
 
     public UserEntity getUserByID(Long userId) {
         UserEntity user=userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("yate chai mummd ame id sth lad gude ishfaqs"));
         return user;
+    }
+
+    public UserEntity save(UserEntity userEntity) {
+    return userRepo.save(userEntity);
     }
 }
