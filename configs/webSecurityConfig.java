@@ -2,6 +2,7 @@ package com.practices.demo.configs;
 
 import com.practices.demo.entities.UserEntity;
 import com.practices.demo.filter.AuthJwtFilter;
+import com.practices.demo.handlers.Oauth2SucessesHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,16 +26,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class webSecurityConfig {
     private final AuthJwtFilter authJwtFilter;
+      private final Oauth2SucessesHandler oauth2SucessesHandler;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf(csrf -> csrf.disable()) // disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()  // allow signup/login
+                        .requestMatchers("/auth/**","/home.html").permitAll()  // allow signup/login
                         .anyRequest().authenticated()
                         // everything else needs auth
                 ).addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(form -> form.disable())   // ❌ disable Spring’s login page
-                .httpBasic(basic -> basic.disable()); // ❌ disable HTTP Basic too
+
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .oauth2Login(oauth2Config->oauth2Config.failureUrl("/login?error=true")
+                        .successHandler(oauth2SucessesHandler)
+                );
 
         return httpSecurity.build();
 //        httpSecurity.authorizeHttpRequests(auth->auth.requestMatchers("/auth").permitAll()
