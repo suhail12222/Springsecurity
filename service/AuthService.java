@@ -4,7 +4,6 @@ import com.practices.demo.dto.LoginDto;
 import com.practices.demo.dto.LoginResponseDto;
 import com.practices.demo.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,7 @@ public class AuthService {
     public LoginResponseDto login(LoginDto loginDto){
         Authentication authenticate=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(),loginDto.getPassword()));
         UserEntity user=(UserEntity)authenticate.getPrincipal();
-        String acessToken=jwtService.generateSecretKey(user);
+        String acessToken=jwtService.generateSecritKey(user);
         String refreshToken= jwtService.getRefreshToken(user);
         return new LoginResponseDto(user.getId(), acessToken,refreshToken);
     }
@@ -27,7 +26,7 @@ public class AuthService {
     public LoginResponseDto refrehToken(String refreshToken) {
         Long userId=jwtService.getValidate(refreshToken);
         UserEntity user=userService.getUserByID(userId);
-        String acessToken=jwtService.generateSecretKey(user);
+        String acessToken=jwtService.generateSecritKey(user);
         return new LoginResponseDto(user.getId(),acessToken,refreshToken);
     }
 }
